@@ -11,13 +11,19 @@ import {
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import { UsuarioContext } from 'Common/Context/Usuario';
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 
 function Login() {
   const {nome, setNome, saldo, setSaldo} = useContext(UsuarioContext)
+  const inputRef = useRef()
 
   const history = useNavigate();
+
+  useEffect(()=>{
+    inputRef.current.focus()
+
+  },[])
 
   return (
     <Container>
@@ -29,6 +35,7 @@ function Login() {
           Nome
         </InputLabel>
         <Input
+          ref={inputRef}
           value={nome}
           onChange={(evento) => setNome(evento.target.value)}
           type="text"
@@ -50,6 +57,7 @@ function Login() {
       />
       </InputContainer>
       <Button
+        disabled={nome.length < 3}
         variant="contained"
         color="primary"
         onClick={() => history("/feira")}
