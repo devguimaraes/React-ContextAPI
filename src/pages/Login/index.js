@@ -9,10 +9,11 @@ import {
   InputLabel,
   InputAdornment 
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ nome, setNome, saldo, setSaldo }) {
-  const history = useHistory();
+  const history = useNavigate();
+
   return (
     <Container>
       <Titulo>
@@ -46,7 +47,7 @@ function Login({ nome, setNome, saldo, setSaldo }) {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => history.push("/feira")}
+        onClick={() => history("/feira")}
       >
         Avançar
       </Button>
