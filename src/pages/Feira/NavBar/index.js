@@ -3,12 +3,14 @@ import { ReactComponent as Logo } from 'assets/logo.svg';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-
+import { useNavigate  } from "react-router-dom";
 export default function NavBar() {
+  const history = useNavigate()
+
   return (
     <Nav>
-      <Logo />
-      <IconButton>
+      <Logo onClick={()=>history('/')} />
+      <IconButton >
         <Badge
           color="primary"
         >

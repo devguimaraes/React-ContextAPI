@@ -6,16 +6,20 @@ import {
 import feira from './feira.json';
 import Produto from 'components/Produto';
 import NavBar from './NavBar';
+import { UsuarioContext } from 'Common/Context/Usuario';
+import { useContext } from "react";
 
 
 function Feira() {
+  const {nome, saldo} = useContext(UsuarioContext)
+
   return (
     <Container>
       <NavBar />
       <Header>
         <div>
-          <h2> Olá!</h2>
-          <h3> Saldo: R$</h3>
+          <h2> Olá! {nome || null}</h2>
+          <h3> Saldo: R${saldo.toFixed(2) || 0.00}</h3>
         </div>
         <p>Encontre os melhores produtos orgânicos!</p>
       </Header>
