@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { AppRouter } from './routes';
 import { UsuarioProvider } from "Common/Context/Usuario";
+import CarrinhoProvider from 'Common/Context/Carrinho';
 
 const theme = createTheme({
   palette: {
@@ -21,9 +22,13 @@ ReactDOM.render(
   <React.StrictMode>
     <StylesProvider injectFirst>
       <ThemeProvider theme={theme}>
+        
         <UsuarioProvider>
+          <CarrinhoProvider>
           <AppRouter />
+          </CarrinhoProvider>
         </UsuarioProvider>
+      
       </ThemeProvider>
     </StylesProvider>
   </React.StrictMode>,
