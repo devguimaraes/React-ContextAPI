@@ -10,12 +10,12 @@ import {
   InputAdornment 
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-import { UsuarioContext } from 'Common/Context/Usuario';
-import { useContext, useEffect, useRef } from "react";
+import { useUsuarioContext } from 'Common/Context/Usuario';
+import { useEffect, useRef } from "react";
 
 
 function Login() {
-  const {nome, setNome, saldo, setSaldo} = useContext(UsuarioContext)
+  const {nome, setNome, saldo, setSaldo} = useUsuarioContext()
   const inputRef = useRef()
 
   const history = useNavigate();

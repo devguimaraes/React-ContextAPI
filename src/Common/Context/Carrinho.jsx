@@ -6,9 +6,17 @@ CarrinhoContext.displayName = "Carrinho";
 export const CarrinhoProvider = ({ children }) => {
   const [carrinho, setCarrinho] = useState([]);
   const [totalProdutos, setTotalProdutos] = useState(0);
+  const [valorTotal, setvalorTotal] = useState(0);
   return (
     <CarrinhoContext.Provider
-      value={{ carrinho, setCarrinho, totalProdutos, setTotalProdutos }}
+      value={{
+        carrinho,
+        setCarrinho,
+        totalProdutos,
+        setTotalProdutos,
+        valorTotal,
+        setvalorTotal,
+      }}
     >
       {children}
     </CarrinhoContext.Provider>
@@ -16,8 +24,14 @@ export const CarrinhoProvider = ({ children }) => {
 };
 
 export const useCarrinhoContext = () => {
-  const { carrinho, setCarrinho, totalProdutos, setTotalProdutos } =
-    useContext(CarrinhoContext);
+  const {
+    carrinho,
+    setCarrinho,
+    totalProdutos,
+    setTotalProdutos,
+    valorTotal,
+    setvalorTotal,
+  } = useContext(CarrinhoContext);
 
   const mudarQuantidade = (id, quantidade) => {
     return carrinho.map((itemDoCarrinho) => {
@@ -58,13 +72,17 @@ export const useCarrinhoContext = () => {
   };
 
   useEffect(() => {
-    const totalProd = carrinho.reduce(
-      (acumulador, produto) => acumulador + produto.quantidade,
-      0
+    const { totalProd, valorTotal } = carrinho.reduce(
+      (acumulador, produto) => ({
+        totalProd: acumulador.totalProd + produto.quantidade,
+        valorTotal: acumulador.valorTotal + produto.valor * produto.quantidade,
+      }),
+      { totalProd: 0, valorTotal: 0 }
     );
 
     setTotalProdutos(totalProd);
-  }, [carrinho, setTotalProdutos]);
+    setvalorTotal(valorTotal);
+  }, [carrinho, setTotalProdutos, setvalorTotal]);
 
   return {
     carrinho,
@@ -72,6 +90,7 @@ export const useCarrinhoContext = () => {
     adicionarProduto,
     removerProduto,
     totalProdutos,
+    valorTotal,
   };
 };
 
