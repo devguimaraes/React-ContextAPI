@@ -6,6 +6,7 @@ import './index.css';
 import { AppRouter } from './routes';
 import { UsuarioProvider } from "Common/Context/Usuario";
 import CarrinhoProvider from 'Common/Context/Carrinho';
+import { PagamentoProvider } from 'Common/Context/Pagamento';
 
 const theme = createTheme({
   palette: {
@@ -22,13 +23,15 @@ ReactDOM.render(
   <React.StrictMode>
     <StylesProvider injectFirst>
       <ThemeProvider theme={theme}>
-        
+
         <UsuarioProvider>
           <CarrinhoProvider>
-          <AppRouter />
+            <PagamentoProvider>
+              <AppRouter />
+            </PagamentoProvider>
           </CarrinhoProvider>
         </UsuarioProvider>
-      
+
       </ThemeProvider>
     </StylesProvider>
   </React.StrictMode>,
