@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import usePagamentoContext from "./Pagamento";
+import { useUsuarioContext } from "./Usuario";
 
 export const CarrinhoContext = createContext();
 CarrinhoContext.displayName = "Carrinho";
@@ -6,9 +8,17 @@ CarrinhoContext.displayName = "Carrinho";
 export const CarrinhoProvider = ({ children }) => {
   const [carrinho, setCarrinho] = useState([]);
   const [totalProdutos, setTotalProdutos] = useState(0);
+  const [valorTotal, setvalorTotal] = useState(0);
   return (
     <CarrinhoContext.Provider
-      value={{ carrinho, setCarrinho, totalProdutos, setTotalProdutos }}
+      value={{
+        carrinho,
+        setCarrinho,
+        totalProdutos,
+        setTotalProdutos,
+        valorTotal,
+        setvalorTotal,
+      }}
     >
       {children}
     </CarrinhoContext.Provider>
@@ -16,8 +26,18 @@ export const CarrinhoProvider = ({ children }) => {
 };
 
 export const useCarrinhoContext = () => {
-  const { carrinho, setCarrinho, totalProdutos, setTotalProdutos } =
-    useContext(CarrinhoContext);
+  const {
+    carrinho,
+    setCarrinho,
+    totalProdutos,
+    setTotalProdutos,
+    valorTotal,
+    setvalorTotal,
+  } = useContext(CarrinhoContext);
+
+  const { formaDePagamento } = usePagamentoContext();
+
+  const { saldo, setSaldo } = useUsuarioContext();
 
   const mudarQuantidade = (id, quantidade) => {
     return carrinho.map((itemDoCarrinho) => {
@@ -57,14 +77,23 @@ export const useCarrinhoContext = () => {
     setCarrinho(mudarQuantidade(id, -1));
   };
 
+  const efetuarCompra = () => {
+    setCarrinho([]);
+    setSaldo((saldoAtual) => saldoAtual - valorTotal);
+  };
+
   useEffect(() => {
-    const totalProd = carrinho.reduce(
-      (acumulador, produto) => acumulador + produto.quantidade,
-      0
+    const { totalProd, valorTotal } = carrinho.reduce(
+      (acumulador, produto) => ({
+        totalProd: acumulador.totalProd + produto.quantidade,
+        valorTotal: acumulador.valorTotal + produto.valor * produto.quantidade,
+      }),
+      { totalProd: 0, valorTotal: 0 }
     );
 
     setTotalProdutos(totalProd);
-  }, [carrinho, setTotalProdutos]);
+    setvalorTotal(Number(valorTotal) * Number(formaDePagamento.juros));
+  }, [carrinho, setTotalProdutos, setvalorTotal, formaDePagamento]);
 
   return {
     carrinho,
@@ -72,6 +101,8 @@ export const useCarrinhoContext = () => {
     adicionarProduto,
     removerProduto,
     totalProdutos,
+    valorTotal,
+    efetuarCompra,
   };
 };
 
